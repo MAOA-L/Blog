@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询</title>
+    <link rel="stylesheet" href="{% static 'css/bus.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+</head>
+<body style="height: 100%; background-color: #000;">
+{% for i in bus_list %}
+    <a class="{% cycle 'menu_btn_left' 'menu_btn_right' %}" href="?puzzleid={{ i }}">{{ i }}<span style="font-size: 12px;"> 开头</span></a>
+{% endfor %}
+{% for i in puzzle_bus %}
+    <a class="{% cycle 'menu_btn_left' 'menu_btn_right' %} " href="?target={{ i.1 }}">{{ i.0 }}</a>
+{% endfor %}
+
+{% if start_stations %}
+    <div class="menu_btn_all" style="float: none"><span style="color: #ffe5db">{{ bus_number.text }}</span> {{ start_stations }} <a href="?target={{ bus_back }}" class="menu_btn_small_2">返程</a></div>
+    <div style="text-align: center"><a href="/bus" class="menu_btn_small">首页</a></div>
+{% endif %}
+
+<div style="position:absolute;background-image: url({% static 'images/copy_texture_1_large.jpg' %});-webkit-background-clip: text;color: transparent !important;">
+{% for i in bus_stations %}
+    <a class="{% cycle 'menu_btn_left' 'menu_btn_right' %} bus_list" href="" id="{{ i.1 }}"><img data="bus" src="{% static 'images/sign-number.png' %}">{{ i.0 }}</a>
+{% endfor %}
+</div>
+<script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+<script>
+{% if start_stations %}
+        getGpsInfo();
+    function getGpsInfo(){
+        $.ajax({
+            type: 'GET',
+            url: './bus_search',
+            data:{'ajax':"{{ ajax }}"},
+            success:function(data){
+                data = JSON.parse(data);
+                console.log(data);
+                $('img[data="bus"]').css('display', 'none');
+                for(let i=0; i<data.length; i++){
+                    $('#'+data[i]+' img').css('display', 'block');
+                }
+            },
+        });
+        setTimeout(getGpsInfo, 5000);
+
+    }
+{% endif %}
+</script>
+</body>
+</html>

@@ -70,34 +70,31 @@ WSGI_APPLICATION = 'Blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wx',
-        'USER': 'root',
-        'PASSWORD': '13486059134chen',
-        'HOST': '47.106.236.37',
-        'PORT': '3306',
-        'CONN_MAX_AGE': 700,
-    },
-    # 'db_note': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'blog',
-    #     'USER': 'shawjean',
-    #     'PASSWORD': '13486059134',
-    #     'HOST': '119.23.216.166',
-    #     'PORT': '3306'
-    # }
-}
-DATABASE_ROUTERS = ['Blog.database_router.DatabaseAppsRouter']
-DATABASE_APPS_MAPPING = {
-    # 'Wx': 'default',
-    'BlogFront': 'db_note'
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'wx',
+#         'USER': 'root',
+#         'PASSWORD': '13486059134chen',
+#         'HOST': '47.106.236.37',
+#         'PORT': '3306',
+#         'CONN_MAX_AGE': 700,
+#     },
+#     # 'db_note': {
+#     #     'ENGINE': 'django.db.backends.mysql',
+#     #     'NAME': 'blog',
+#     #     'USER': 'shawjean',
+#     #     'PASSWORD': '13486059134',
+#     #     'HOST': '119.23.216.166',
+#     #     'PORT': '3306'
+#     # }
+# }
+# DATABASE_ROUTERS = ['Blog.database_router.DatabaseAppsRouter']
+# DATABASE_APPS_MAPPING = {
+#     # 'Wx': 'default',
+#     'BlogFront': 'db_note'
+# }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,7 +129,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件�?
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件�?
 
 STATICFILES_DIRS = [
     'Bus/static_bus',
@@ -142,4 +139,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 LOGIN_URL = '/login'
 
+django_profiles_active = 'dev'  # dev 本地开发  test  测试   prod 生产
 
+if django_profiles_active == 'dev':
+    from Blog.settings_dev import *
+elif django_profiles_active == 'prod':
+    from Blog.settings_prod import *

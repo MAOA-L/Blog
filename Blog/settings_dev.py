@@ -4,7 +4,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': 'rddb',
-        'NAME': 'snpc_sm_term_count',
+        'NAME': 'wx',
         'USER': 'root',
         'PASSWORD': '13486059134chen',
         'HOST': '127.0.0.1',

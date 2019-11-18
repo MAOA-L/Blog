@@ -174,7 +174,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '13486059134chen',
         'HOST': '127.0.0.1',
-        'PORT': '3357',
+        'PORT': '3306',
         'OPTIONS': {
             'isolation_level': 'repeatable read',
             'charset': 'utf8mb4',

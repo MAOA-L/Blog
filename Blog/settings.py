@@ -28,9 +28,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
 
-    'BlogFront',
-    'Wx',
-    'Bus',
+    # 'BlogFront',
+    # 'Wx',
+    'Bus.apps.BusConfig',
+    'base.apps.BaseConfig'
 ]
 
 MIDDLEWARE = [

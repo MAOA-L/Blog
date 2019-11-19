@@ -1,4 +1,6 @@
 from django.shortcuts import render, HttpResponse
+from rest_framework import generics
+
 from spider.bus import bus_yy
 
 
@@ -42,4 +44,10 @@ def bus_search(request):
         return render(request, 'htmls/bus_list.html', results)
 
     return render(request, 'htmls/bus_list.html', {'bus_list': p})
+
+
+class GetBusStations(generics.ListAPIView):
+    """
+    获取公交车站点
+    """
 

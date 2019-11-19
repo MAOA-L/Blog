@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse
 from spider.bus import bus_yy
-# Create your views here.
 
 
 def index(request):

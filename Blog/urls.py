@@ -20,9 +20,9 @@ from Wx import urls as wx_urls
 from Learn import urls as learn_urls
 from Bus import urls as bus_urls
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('wx', include(wx_urls)),
-    path('learn', include(learn_urls)),
-    path('bus/', include(bus_urls)),
-    path('', include(urls)),
+    # path('learn', include(learn_urls)),
+    # path('bus/', include(bus_urls)),
+    path('', include(bus_urls)),
 ]

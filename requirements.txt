@@ -5,3 +5,4 @@ mysqlclient
 requests
 lxml
 pillow
+django-cors-headers

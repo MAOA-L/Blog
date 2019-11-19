@@ -7,7 +7,7 @@ DATABASES = {
         'NAME': 'wx',
         'USER': 'root',
         'PASSWORD': '13486059134chen',
-        'HOST': '127.0.0.1',
+        'HOST': '47.106.236.37',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',

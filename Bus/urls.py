@@ -6,11 +6,13 @@
  @Software: PyCharm
  """
 from django.conf import urls
+from django.conf.urls import url
 from django.urls import path
-from Bus import views
+from Bus import views as bus_views
 
 urlpatterns = [
-    path('index', views.index),
-    path('bus_search', views.bus_search),
-    path('', views.index),
+    # path('index', views.index),
+    # path('bus_search', views.bus_search),
+    # path('', views.index),
+    url(r'^bus/getBusStations/$', bus_views.GetBusStations.as_view())
 ]

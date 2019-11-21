@@ -15,13 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from BlogFront import urls
-from Wx import urls as wx_urls
-from Learn import urls as learn_urls
 from Bus import urls as bus_urls
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('wx', include(wx_urls)),
+    # path('wx', include(wx_urls)),
     # path('learn', include(learn_urls)),
     # path('bus/', include(bus_urls)),
     path('', include(bus_urls)),

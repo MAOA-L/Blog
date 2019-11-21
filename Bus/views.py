@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from rest_framework import generics
 
 from spider.bus import bus_yy
+from utils.return_tools import success_hr
 
 
 def index(request):
@@ -51,3 +52,5 @@ class GetBusStations(generics.ListAPIView):
     获取公交车站点
     """
 
+    def get(self, request, *args, **kwargs):
+        return success_hr([1, 2, 3])

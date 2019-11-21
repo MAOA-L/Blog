@@ -19,3 +19,5 @@ class BusStations(Base):
     bus = models.ForeignKey("BusInfo", verbose_name="所属公交", on_delete=models.CASCADE, related_name="%(class)s_bus")
     name = models.CharField(verbose_name="公交站名", max_length=180)
     station_id = models.PositiveSmallIntegerField(verbose_name="站点id", null=True)
+    lon = models.CharField(verbose_name="经度", max_length=32)
+    lat = models.CharField(verbose_name="纬度", max_length=32)

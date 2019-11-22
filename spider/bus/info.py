@@ -8,9 +8,7 @@
 # 服务器
 service = 'http://bm.eyuyao.com/bus/mobile/'
 # 发包信息
-User_Agent = ['Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45',
-              'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-              'Chrome/55.0.2883.87 UBrowser/6.2.4094.1 Safari/537.36']
+User_Agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
 # 公交车搜索url 空白为默认全部
 url_search = 'http://bm.eyuyao.com/bus/mobile/lineList.php?k=pp&q={}'
 # ajax 不变部分

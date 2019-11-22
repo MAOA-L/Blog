@@ -3,11 +3,10 @@ import datetime
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'rddb',
-        'NAME': 'wx',
+        'NAME': 'myapp',
         'USER': 'root',
         'PASSWORD': '13486059134chen',
-        'HOST': '47.106.236.37',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -23,14 +22,14 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s\033[0m'
         },
         'no_format': {
             # 只有日志时间的格式
             'format': '%(asctime)s\t%(message)s'
         },
         'console_print_format': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] \n%(message)s'
+            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] %(message)s\033[0m'
         },
         'http_request': {
             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(logCategory)s] [%(requestId)s] [%(IMEI)s] [%(APP_PLATFORM)s:%(APP_VERSION)s] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] [%(userName)s:%(userId)s:%(termUserId)s] %(message)s'
@@ -127,7 +126,7 @@ LOGGING = {
         # },
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False
         },
         'django.request': {

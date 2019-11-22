@@ -1,5 +1,8 @@
+import json
+
 from django.shortcuts import render, HttpResponse
 from rest_framework import generics
+from rest_framework.response import Response
 
 from spider.bus import bus_yy
 from utils.return_tools import success_hr
@@ -49,8 +52,11 @@ def bus_search(request):
 
 class GetBusStations(generics.ListAPIView):
     """
-    获取公交车站点
+    get bus stations
     """
 
     def get(self, request, *args, **kwargs):
-        return success_hr([1, 2, 3])
+        result = []
+        for i in range(5):
+            result.append({'number': i, 'road': f"{i}->{i+1}", 'note': f"This is {i}"}, )
+        return success_hr(result)

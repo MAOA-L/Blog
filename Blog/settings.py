@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'utils.exception_handler.CustomExceptionHandler',
+    'EXCEPTION_HANDLER': 'utils.exception_handler.custom_exception_handler',
 
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # LimitOffsetPagination 分页风格
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # LimitOffsetPagination 分页风格
@@ -164,7 +165,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静�
 
 STATICFILES_DIRS = [
     'Bus/static_bus',
-    'BlogFront/static',
 ]
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'

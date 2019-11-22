@@ -5,16 +5,19 @@ from base.models import Base
 
 class BusInfo(Base):
     """
-    公交
+    bus
     """
     number = models.CharField(verbose_name="公交号", max_length=32)
     departure_station = models.CharField(verbose_name="始发站", max_length=255)
     destination = models.CharField(verbose_name="终点站", max_length=255)
+    visit_traffic = models.IntegerField(verbose_name="访问量", default=0)
+    code = models.CharField(verbose_name="公交辨识码", max_length=32)
+    bus_type = models.CharField(verbose_name="公交所属区域", max_length=32)
 
 
 class BusStations(Base):
     """
-    公交车站信息
+    bus stations info
     """
     bus = models.ForeignKey("BusInfo", verbose_name="所属公交", on_delete=models.CASCADE, related_name="%(class)s_bus")
     name = models.CharField(verbose_name="公交站名", max_length=180)

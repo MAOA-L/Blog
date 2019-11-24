@@ -8,7 +8,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Bus', '0003_businfo_bus_type'),
+        ('bus', '0003_businfo_bus_type'),
     ]
 
     operations = [

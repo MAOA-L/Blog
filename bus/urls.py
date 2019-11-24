@@ -8,7 +8,7 @@
 from django.conf import urls
 from django.conf.urls import url
 from django.urls import path
-from Bus import views as bus_views
+from bus import views as bus_views
 
 urlpatterns = [
     # path('index', views.index),

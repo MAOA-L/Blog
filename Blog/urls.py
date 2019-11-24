@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from Bus import urls as bus_urls
+from bus import urls as bus_urls
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # path('wx', include(wx_urls)),

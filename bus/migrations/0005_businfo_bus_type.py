@@ -7,13 +7,13 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Bus', '0004_auto_20191124_1540'),
+        ('bus', '0004_auto_20191124_1540'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='businfo',
             name='bus_type',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='Bus.BusTypeArea', verbose_name='公交类型'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='bus.BusTypeArea', verbose_name='公交类型'),
         ),
     ]

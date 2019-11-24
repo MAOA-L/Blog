@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('station_id', models.PositiveSmallIntegerField(null=True, verbose_name='站点id')),
                 ('lon', models.CharField(max_length=32, verbose_name='经度')),
                 ('lat', models.CharField(max_length=32, verbose_name='纬度')),
-                ('bus', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='busstations_bus', to='Bus.BusInfo', verbose_name='所属公交')),
+                ('bus', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='busstations_bus', to='bus.BusInfo', verbose_name='所属公交')),
             ],
             options={
                 'abstract': False,

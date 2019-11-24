@@ -6,8 +6,8 @@ from django.shortcuts import render, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
-from Bus.models import BusInfo
-from Bus.serializers import GetBusStationsSerializer
+from bus.models import BusInfo
+from bus.serializers import GetBusStationsSerializer
 from base.views import BaseAPIView
 from spider.bus import bus_yy
 from utils.return_tools import success_hr

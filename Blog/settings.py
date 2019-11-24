@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
     # 'BlogFront',
     # 'Wx',
-    'Bus.apps.BusConfig',
+    'bus.apps.BusConfig',
     'base.apps.BaseConfig'
 ]
 
@@ -164,7 +164,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件�?
 
 STATICFILES_DIRS = [
-    'Bus/static_bus',
+    'bus/static_bus',
 ]
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'

@@ -18,7 +18,7 @@ from lxml import etree
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Blog.settings")
 django.setup()
-from Bus.models import BusInfo
+from bus.models import BusInfo
 
 
 def fetch_html(url, method="GET", data=None, headers=None, charset='gbk'):

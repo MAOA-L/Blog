@@ -8,7 +8,7 @@
  """
 from rest_framework import serializers
 
-from Bus.models import BusInfo
+from bus.models import BusInfo
 
 
 class GetBusStationsSerializer(serializers.ModelSerializer):

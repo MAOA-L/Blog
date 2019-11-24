@@ -1,16 +1,35 @@
+import datetime
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'myapp',
+        'USER': 'root',
+        'PASSWORD': '13486059134chen',
+        'HOST': '47.106.236.37',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'isolation_level': 'repeatable read',
+        },
+        'CONN_MAX_AGE': 12,
+        'ATOMIC_REQUESTS': True
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s\033[0m'
         },
         'no_format': {
             # 只有日志时间的格式
             'format': '%(asctime)s\t%(message)s'
         },
         'console_print_format': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] \n%(message)s'
+            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] %(message)s\033[0m'
         },
         'http_request': {
             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(logCategory)s] [%(requestId)s] [%(IMEI)s] [%(APP_PLATFORM)s:%(APP_VERSION)s] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] [%(userName)s:%(userId)s:%(termUserId)s] %(message)s'
@@ -36,7 +55,7 @@ LOGGING = {
             'formatter': 'standard',
         },
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
@@ -57,15 +76,6 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/request.log',
-            'maxBytes': 1024 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'http_request',
-            'encoding': 'utf-8',
-        },
-        'http_error_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/error.log',
             'maxBytes': 100 * 1024 * 1024,
             'backupCount': 5,
             'formatter': 'http_request',
@@ -90,7 +100,7 @@ LOGGING = {
             'encoding': 'utf-8',
         },
         'permission_denied_handler': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/permission_denied.log',
             'maxBytes': 100 * 1024 * 1024,
@@ -115,7 +125,7 @@ LOGGING = {
         #     },
         # },
         'django': {
-            'handlers': ['default', 'console'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False
         },
@@ -125,12 +135,12 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'time.request': {
-            # 时间统计
-            'handlers': ['time_request_handler'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
+        # 'time.request': {
+        #     # 时间统计
+        #     'handlers': ['time_request_handler'],
+        #     'level': 'DEBUG',
+        #     'propagate': True
+        # },
         'console_print': {
             # 控制台输出
             'handlers': ['console_print'],
@@ -143,20 +153,20 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True
         },
+        'db_opt': {
+            'handlers': ['db_opt_handler'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
         'http.login': {
             # 登录
             'handlers': ['http_login_handler'],
             'level': 'DEBUG',
             'propagate': True
         },
-        'db_opt': {
-            'handlers': ['db_opt_handler'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
         'permission_denied': {
             'handlers': ['permission_denied_handler'],
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'propagate': True
         },
         'business_error': {
@@ -164,22 +174,5 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True
         },
-    }
-}
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wx',
-        'USER': 'root',
-        'PASSWORD': '13486059134chen',
-        'HOST': '47.106.236.37',
-        'PORT': '3306',
-        'OPTIONS': {
-            'isolation_level': 'repeatable read',
-            'charset': 'utf8mb4',
-        },
-        'CONN_MAX_AGE': 12,
-        'ATOMIC_REQUESTS': True
     }
 }

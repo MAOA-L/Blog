@@ -75,8 +75,8 @@ def recursion(element):
 
 
 if __name__ == '__main__':
-    url = 'http://bm.eyuyao.com/bus/type/ChengQuGongJiao.html'
-    # url = 'https://www.cyanzoy.top/post/LfH2aK5oT/'
+    # url = 'http://bm.eyuyao.com/bus/type/ChengQuGongJiao.html'
+    url = 'http://bm.eyuyao.com/bus/type/ChengXiangGongJiao.html'
     content = fetch_html(url=url)
     if content:
         content = etree.HTML(content)
@@ -99,7 +99,8 @@ if __name__ == '__main__':
                     number=number,
                     code=code,
                     departure_station='',
-                    destination=''
+                    destination='',
+                    bus_type=2
                 ))
         BusInfo.objects.bulk_create(bus_info_list)
                 # print(code, number)

@@ -3,6 +3,13 @@ from django.db import models
 from base.models import Base
 
 
+class BusTypeArea(Base):
+    """
+    公交类型区域
+    """
+    name = models.CharField(verbose_name="类型名", max_length=32)
+
+
 class BusInfo(Base):
     """
     bus
@@ -12,7 +19,7 @@ class BusInfo(Base):
     destination = models.CharField(verbose_name="终点站", max_length=255)
     visit_traffic = models.IntegerField(verbose_name="访问量", default=0)
     code = models.CharField(verbose_name="公交辨识码", max_length=32)
-    bus_type = models.CharField(verbose_name="公交所属区域", max_length=32)
+    bus_type = models.ForeignKey(BusTypeArea, verbose_name="公交类型", on_delete=models.SET_NULL, null=True)
 
 
 class BusStations(Base):

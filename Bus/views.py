@@ -1,9 +1,14 @@
 import json
+from collections import OrderedDict
 
+from django.db.models import Q
 from django.shortcuts import render, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
+from Bus.models import BusInfo
+from Bus.serializers import GetBusStationsSerializer
+from base.views import BaseAPIView
 from spider.bus import bus_yy
 from utils.return_tools import success_hr
 
@@ -50,13 +55,34 @@ def bus_search(request):
     return render(request, 'htmls/bus_list.html', {'bus_list': p})
 
 
-class GetBusStations(generics.ListAPIView):
+class GetBusStations(BaseAPIView, generics.ListAPIView):
     """
     get bus stations
     """
+    queryset = BusInfo.objects.filter().order_by('bus_type', 'number', 'visit_traffic')
+    serializer_class = GetBusStationsSerializer
+
+    query_sql = Q(is_active=True)
 
     def get(self, request, *args, **kwargs):
-        result = []
-        for i in range(5):
-            result.append({'number': i, 'road': f"{i}->{i+1}", 'note': f"This is {i}"}, )
-        return success_hr(result)
+        bus_type = self.request.query_params.get("t")  # 公交类型 uuid
+        number = self.request.query_params.get("n")  # 公交线路名
+        area = self.request.query_params.get("area_id", "城区")
+        if area in [1, '1']:
+            area = '城乡'
+            self.query_sql &= Q(bus_type__name__contains=area)
+        if bus_type:
+            self.query_sql &= Q(bus_type__id=bus_type)
+        if number:
+            self.query_sql &= Q(number__contains=number)
+        result_queryset = self.queryset.filter(self.query_sql)
+        result = OrderedDict()
+        for i in result_queryset:
+            number = i.number[:i.number.find("路")+1] if i.number.find("路") else i.number
+            result.setdefault(number, GetBusStationsSerializer(i).data)
+
+        page = self.paginate_queryset(list(result.values()))
+        if page is not None:
+            return self.get_paginated_response(page)
+
+        return success_hr(self.get_serializer(result_queryset.all(), many=True).data)

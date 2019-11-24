@@ -10,10 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='businfo',
-            name='bus_type',
-            field=models.CharField(max_length=32, verbose_name='公交所属区域'),
-            preserve_default=False,
-        ),
+
     ]

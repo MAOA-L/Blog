@@ -6,7 +6,9 @@
  @Software: PyCharm
  @Describe: 
  """
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+import json
+
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -30,7 +32,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         # Called with either text_data or bytes_data for each frame
         # You can call:
-        await self.send(text_data="Hello world!")
+        await self.send(json.dumps({
+            "msg": "Hello"
+        }))
         # Or, to send a binary frame:
         # await self.send(bytes_data="Hello world!")
         # Want to force-close the connection? Call:

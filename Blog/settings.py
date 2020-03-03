@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'channels',
 
     # 'BlogFront',
     # 'Wx',
@@ -85,7 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Blog.wsgi.application'
-
+ASGI_APPLICATION = "Blog.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -170,7 +171,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 LOGIN_URL = '/login'
 
-django_profiles_active = 'prod'  # dev 本地开发  test  测试   prod 生产
+django_profiles_active = 'dev'  # dev 本地开发  test  测试   prod 生产
 
 if django_profiles_active == 'dev':
     from Blog.settings_dev import *

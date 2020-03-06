@@ -17,6 +17,15 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://47.106.236.37:6379/7"],
+        },
+    },
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,

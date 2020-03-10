@@ -3,7 +3,7 @@ import datetime
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'myapp',
+        'NAME': 'app_prod',
         'USER': 'root',
         'PASSWORD': 'admin123456',
         'HOST': '47.106.236.37',

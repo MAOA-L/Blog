@@ -28,7 +28,7 @@ CHANNEL_LAYERS = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'standard': {
             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
@@ -54,10 +54,10 @@ LOGGING = {
     },
     'handlers': {
         'default': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/all.log',  # 日志输出文件
-            'maxBytes': 100 * 1024 * 1024,  # 文件大小
+            'maxBytes': 100 * 1024 * 5,  # 文件大小
             'backupCount': 5,  # 备份份数
             'formatter': 'standard',  # 使用哪种formatters日志格式
         },

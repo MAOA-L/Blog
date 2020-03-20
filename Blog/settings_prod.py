@@ -31,20 +31,26 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s\033[0m'
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         },
         'no_format': {
             # 只有日志时间的格式
             'format': '%(asctime)s\t%(message)s'
         },
         'console_print_format': {
-            'format': '\033[22;36;m%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] %(message)s\033[0m'
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] %(message)s'
         },
         'http_request': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(logCategory)s] [%(requestId)s] [%(IMEI)s] [%(APP_PLATFORM)s:%(APP_VERSION)s] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] [%(userName)s:%(userId)s:%(termUserId)s] %(message)s'
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(logCategory)s] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s] %(message)s'
         },
     },
     'filters': {
+        'callback_filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': [
+                'Blog.utils.django_http_filter'
+            ]
+        }
     },
     'handlers': {
         'default': {
@@ -134,7 +140,7 @@ LOGGING = {
         #     },
         # },
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'default'],
             'level': 'INFO',
             'propagate': False
         },
@@ -160,6 +166,7 @@ LOGGING = {
             # http请求
             'handlers': ['http_request_handler'],
             'level': 'DEBUG',
+            'filters': ['callback_filter'],
             'propagate': True
         },
         'db_opt': {

@@ -54,9 +54,9 @@ LOGGING = {
     },
     'handlers': {
         'default': {
-            'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/all.log',  # 日志输出文件
+            'level': 'INFO',
             'maxBytes': 100 * 1024 * 5,  # 文件大小
             'backupCount': 5,  # 备份份数
             'formatter': 'standard',  # 使用哪种formatters日志格式
@@ -74,121 +74,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
-        'console_print': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'console_print_format'
-        },
-        'time_request_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/time_request.log',
-            'maxBytes': 100 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'no_format',
-        },
-        'http_request_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/request.log',
-            'maxBytes': 100 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'http_request',
-            'encoding': 'utf-8',
-        },
-        'http_login_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/login_request.log',
-            'maxBytes': 100 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'http_request',
-            'encoding': 'utf-8',
-        },
-        'db_opt_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/db_operation_log.log',
-            'maxBytes': 100 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'http_request',
-            'encoding': 'utf-8',
-        },
-        'permission_denied_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/permission_denied.log',
-            'maxBytes': 100 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'no_format',
-        },
-        'business_error_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/business_error.log',
-            'maxBytes': 1024 * 1024 * 1024,
-            'backupCount': 5,
-            'formatter': 'no_format',
-        },
     },
     'loggers': {
-        # 'biz.error.logger':{
-        #     'django': {
-        #         'handlers': ['default', 'console','biz.error'],
-        #         'level': 'DEBUG',
-        #         'propagate': False
-        #     },
-        # },
         'django': {
-            'handlers': ['console', 'default'],
+            'handlers': ['console'],
             'level': 'DEBUG',
-            'propagate': False
+            'propagate': True
         },
         'django.request': {
             # 请求处理
-            'handlers': ['console', 'error', 'default'],
+            'handlers': ['console', 'default'],
             'level': 'INFO',
             'propagate': False,
-        },
-        # 'time.request': {
-        #     # 时间统计
-        #     'handlers': ['time_request_handler'],
-        #     'level': 'DEBUG',
-        #     'propagate': True
-        # },
-        'console_print': {
-            # 控制台输出
-            'handlers': ['console_print'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
-        'http.request': {
-            # http请求
-            'handlers': ['http_request_handler'],
-            'level': 'DEBUG',
-            'filters': ['callback_filter'],
-            'propagate': True
-        },
-        'db_opt': {
-            'handlers': ['db_opt_handler'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
-        'http.login': {
-            # 登录
-            'handlers': ['http_login_handler'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
-        'permission_denied': {
-            'handlers': ['permission_denied_handler'],
-            'level': 'ERROR',
-            'propagate': True
-        },
-        'business_error': {
-            'handlers': ['business_error_handler'],
-            'level': 'ERROR',
-            'propagate': True
         },
     }
 }

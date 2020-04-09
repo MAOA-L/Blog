@@ -21,7 +21,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": ["redis://47.106.236.37:6379/7"],
+            "hosts": ["redis://:1996Chan@47.106.236.37:6379/7"],
         },
     },
 }
@@ -78,7 +78,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'default'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True
         },
         'django.request': {

@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     # 'BlogFront',
     # 'Wx',
     'bus.apps.BusConfig',
-    'base.apps.BaseConfig'
+    'base.apps.BaseConfig',
+    'novel.apps.NovelConfig',
 ]
 
 MIDDLEWARE = [

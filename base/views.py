@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import generics
 
@@ -5,10 +6,10 @@ from utils.pagination import CustomPagination
 from utils.return_tools import success_hr
 
 
-class BaseAPIView(generics.ListAPIView,
-                  generics.RetrieveAPIView):
+class BaseAPIView(generics.ListAPIView, generics.RetrieveAPIView):
 
     pagination_class = CustomPagination
+    query_sql = Q(is_active=True)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())

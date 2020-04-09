@@ -19,6 +19,7 @@ class CreateGraspRuleSerializer(serializers.ModelSerializer):
         fields = (
             'service',
             'host',
+            'section_rule_p',
             'section_rule',
             'content_rule',
         )

@@ -7,6 +7,7 @@ class GraspRule(Base):
     """抓取规则"""
     service = models.CharField(verbose_name="网站服务地址", max_length=50, null=True)
     host = models.CharField(verbose_name="网站host", max_length=100)
+    section_rule_p = models.CharField(verbose_name="父类章节抓取规则", max_length=100, null=True)
     section_rule = models.CharField(verbose_name="章节抓取规则", max_length=100)
     content_rule = models.CharField(verbose_name="内容抓取规则", max_length=100)
 

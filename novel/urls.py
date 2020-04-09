@@ -14,4 +14,7 @@ urlpatterns = [
     # describe: 抓取规则
     # 创建抓取规则
     url(r'^rule/createGraspRule/$', views.CreateGraspRule.as_view()),
+
+
+    url(r'^entry/getNovelSections/$', views.GetNovelSections.as_view()),
 ]

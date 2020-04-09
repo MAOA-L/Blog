@@ -22,7 +22,7 @@ urlpatterns = [
     # path('wx', include(wx_urls)),
     # path('learn', include(learn_urls)),
     # path('bus/', include(bus_urls)),
-    path('', include(bus_urls)),
+    url('bus/', include(bus_urls)),
     # novel
-    url('/v1/novel/', include("novel.urls")),
+    url('v1/novel/', include("novel.urls")),
 ]

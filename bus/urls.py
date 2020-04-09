@@ -14,5 +14,5 @@ urlpatterns = [
     # path('index', views.index),
     # path('bus_search', views.bus_search),
     # path('', views.index),
-    url(r'^bus/getBusStations/$', bus_views.GetBusStations.as_view())
+    url(r'^getBusStations/$', bus_views.GetBusStations.as_view())
 ]

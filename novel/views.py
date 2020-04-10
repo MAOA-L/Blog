@@ -45,9 +45,11 @@ class GetNovelSections(BaseAPIView, generics.ListAPIView):
         section_p = parse_html.xpath(list_rule)
         section_p_obj = None
         need_add_obj = []
+        order = 0
         for i in section_p:
             # 判断是否为父级目录
             if dict(i.attrib).get("class") == section_rule_p:
+                order = 0
                 # 判断need_add_obj 有就新增
                 if need_add_obj:
                     NovelSection.objects.bulk_create(need_add_obj)
@@ -56,12 +58,14 @@ class GetNovelSections(BaseAPIView, generics.ListAPIView):
                 section_p_obj = self.create_section(novel=book, name=_name)
             else:
                 # 获取目录
+                order += 1
                 a = i.xpath(section_rule)
                 if a:
                     o = a[0]
                     href = o.xpath("./@href")[0]
                     sec_name = o.text
-                    need_add_obj.append(NovelSection(novel=book, name=sec_name, url=href, parent=section_p_obj))
+                    need_add_obj.append(NovelSection(novel=book, name=sec_name,
+                                                     url=href, parent=section_p_obj, order=order))
         # 结束后再次判断need_add_obj
         if need_add_obj:
             NovelSection.objects.bulk_create(need_add_obj)
@@ -71,6 +75,6 @@ class GetNovelSections(BaseAPIView, generics.ListAPIView):
         """获取书本对象"""
         return NovelEntry.objects.filter(is_active=True, name=book_name).first()
 
-    def create_section(self, novel, name, url=None, parent=None):
+    def create_section(self, novel, name, url=None, parent=None, order=0):
         """创建小说章节"""
-        return NovelSection.objects.create(novel=novel, name=name, url=url, parent=parent)
+        return NovelSection.objects.create(novel=novel, name=name, url=url, parent=parent, order=order)

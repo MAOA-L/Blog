@@ -26,6 +26,7 @@ class NovelSection(Base):
     name = models.CharField(verbose_name="章节名", max_length=255)
     url = models.CharField(verbose_name="章节url", max_length=255, null=True)
     parent = models.ForeignKey('self', verbose_name="章节再次分类", on_delete=models.CASCADE, null=True)
+    order = models.PositiveIntegerField(verbose_name="序号", default=1)
 
 
 class SectionContent(Base):

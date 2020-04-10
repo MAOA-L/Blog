@@ -15,6 +15,6 @@ urlpatterns = [
     # 创建抓取规则
     url(r'^rule/createGraspRule/$', views.CreateGraspRule.as_view()),
 
-
+    # 抓取小说的主体信息和章节信息
     url(r'^entry/getNovelSections/$', views.GetNovelSections.as_view()),
 ]

@@ -165,11 +165,12 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                 with open(file_path, "w+", encoding="utf-8") as f:
                     for i in sections:
                         log_common.out(msg=f"写入{i.section.name}")
+                        f.write('\n' + i.section.name + '\n')
                         f.write(i.content)
-                log_common.out("写入完成")
+                log_common.out(msg="写入完成")
             if os.path.exists(file_path):
                 file = open(file_path, 'r', encoding="utf-8")
-                response = self.get_file_response(file=file, file_name=novel_name+".txt")
+                response = self.get_file_response(file=file, file_name=novel_name + ".txt")
                 return response
 
     def get_file_response(self, file, file_name):

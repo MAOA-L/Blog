@@ -183,7 +183,7 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
 class ErrorTest(BaseAPIView, generics.ListAPIView):
     """错误"""
     def list(self, request, *args, **kwargs):
-        a = 1 / 0
+        # a = 1 / 0
         return SuccessHR([])
 
 

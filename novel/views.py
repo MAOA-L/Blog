@@ -1,5 +1,5 @@
 import os
-from urllib import parse
+from django.utils.http import urlquote
 from collections import deque
 
 from django.db.models import Q
@@ -169,11 +169,11 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                 log_common.out("写入完成")
             if os.path.exists(file_path):
                 file = open(file_path, 'r', encoding="utf-8")
-                response = self.get_file_response(file=file)
+                response = self.get_file_response(file=file, file_name=novel_name+".txt")
                 return response
 
-    def get_file_response(self, file):
+    def get_file_response(self, file, file_name):
         response = FileResponse(file)
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = f'attachment;filename={parse.unquote(file.name)}'
+        response['Content-Disposition'] = f'attachment;filename={urlquote(file_name)}'
         return response

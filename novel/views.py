@@ -178,3 +178,12 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = f'attachment;filename={urlquote(file_name)}'
         return response
+
+
+class ErrorTest(BaseAPIView, generics.ListAPIView):
+    """错误"""
+    def list(self, request, *args, **kwargs):
+        a = 1 / 0
+        return SuccessHR([])
+
+

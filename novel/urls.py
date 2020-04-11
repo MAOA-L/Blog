@@ -17,4 +17,8 @@ urlpatterns = [
 
     # 抓取小说的主体信息和章节信息
     url(r'^entry/getNovelSections/$', views.GetNovelSections.as_view()),
+    # 获取小说主体内容
+    url(r'^entry/getNovelContent/$', views.GetNovelContent.as_view()),
+    # 获取小说txt
+    url(r'^entry/getNovelToTxt/$', views.GetNovelToTxt.as_view()),
 ]

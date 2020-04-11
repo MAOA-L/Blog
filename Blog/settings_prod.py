@@ -87,5 +87,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'console_print': {
+            # 控制台输出
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True
+        },
     }
 }

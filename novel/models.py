@@ -11,6 +11,7 @@ class GraspRule(Base):
     section_rule_p = models.CharField(verbose_name="父类章节抓取规则", max_length=100, null=True)
     section_rule = models.CharField(verbose_name="章节抓取规则", max_length=100)
     list_rule = models.CharField(verbose_name="列表抓取规则", max_length=100)
+    decode = models.CharField(verbose_name="解码配置", max_length=20, default="utf-8")
 
 
 class NovelEntry(Base):
@@ -22,7 +23,7 @@ class NovelEntry(Base):
 
 class NovelSection(Base):
     """小说章节"""
-    novel = models.ForeignKey(NovelEntry, verbose_name="小说", on_delete=models.CASCADE)
+    novel = models.ForeignKey(NovelEntry, verbose_name="小说", on_delete=models.CASCADE, related_name="section_novel")
     name = models.CharField(verbose_name="章节名", max_length=255)
     url = models.CharField(verbose_name="章节url", max_length=255, null=True)
     parent = models.ForeignKey('self', verbose_name="章节再次分类", on_delete=models.CASCADE, null=True)
@@ -31,5 +32,6 @@ class NovelSection(Base):
 
 class SectionContent(Base):
     """章节下的内容"""
-    section = models.ForeignKey(NovelEntry, verbose_name="小说章节", on_delete=models.CASCADE)
+    novel = models.ForeignKey(NovelEntry, verbose_name="小说", on_delete=models.CASCADE, related_name="content_novel")
+    section = models.ForeignKey(NovelSection, verbose_name="小说章节", on_delete=models.CASCADE)
     content = models.TextField(verbose_name="章节下的主要内容")

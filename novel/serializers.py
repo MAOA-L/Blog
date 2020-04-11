@@ -8,7 +8,7 @@
  """
 from rest_framework import serializers
 
-from novel.models import GraspRule
+from novel.models import GraspRule, NovelSection
 
 
 class CreateGraspRuleSerializer(serializers.ModelSerializer):
@@ -22,4 +22,17 @@ class CreateGraspRuleSerializer(serializers.ModelSerializer):
             'section_rule_p',
             'section_rule',
             'content_rule',
+        )
+
+
+class GetNovelSectionsSerializer(serializers.ModelSerializer):
+    """获取小说章节序列化器"""
+    id = serializers.CharField(source='id.hex')
+
+    class Meta:
+        model = NovelSection
+        fields = (
+            'id',
+            'url',
+            'name',
         )

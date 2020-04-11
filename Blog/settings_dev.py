@@ -144,13 +144,13 @@ LOGGING = {
         'console_print': {
             # 控制台输出
             'handlers': ['console_print'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True
         },
         'http.request': {
             # http请求
             'handlers': ['http_request_handler'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True
         },
         'db_opt': {

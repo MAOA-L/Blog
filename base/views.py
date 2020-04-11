@@ -1,13 +1,16 @@
 from django.db.models import Q
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, mixins
+from rest_framework.generics import GenericAPIView
 
+from common.return_tool import SuccessHR
 from utils.pagination import CustomPagination
 from utils.return_tools import success_hr
 
 
-class BaseAPIView(generics.ListAPIView, generics.RetrieveAPIView):
-
+class BaseAPIView(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  GenericAPIView):
     pagination_class = CustomPagination
     query_sql = Q(is_active=True)
 
@@ -26,3 +29,12 @@ class BaseAPIView(generics.ListAPIView, generics.RetrieveAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return success_hr(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return SuccessHR(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save()

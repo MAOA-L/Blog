@@ -15,11 +15,13 @@ class BusInfo(Base):
     bus
     """
     number = models.CharField(verbose_name="公交号", max_length=32)
-    departure_station = models.CharField(verbose_name="始发站", max_length=255)
-    destination = models.CharField(verbose_name="终点站", max_length=255)
+    departure_station = models.CharField(verbose_name="始发站", max_length=255, null=True)
+    destination = models.CharField(verbose_name="终点站", max_length=255, null=True)
     visit_traffic = models.IntegerField(verbose_name="访问量", default=0)
-    code = models.CharField(verbose_name="公交辨识码", max_length=32)
+    code = models.CharField(verbose_name="公交辨识码", max_length=32, null=True)
     bus_type = models.ForeignKey(BusTypeArea, verbose_name="公交类型", on_delete=models.SET_NULL, null=True)
+    grab_real_url = models.CharField(verbose_name="用来获取实况信息的url", max_length=255)
+    real_url = models.CharField(verbose_name="获取实况信息的url", max_length=255, null=True)
 
 
 class BusStations(Base):

@@ -9,8 +9,9 @@ from rest_framework.response import Response
 from bus.models import BusInfo
 from bus.serializers import GetBusStationsSerializer
 from base.views import BaseAPIView
+from bus.utils import grab_base_bus
 from spider.bus import bus_yy
-from common.return_tool import SuccessHR
+from common.return_tool import SuccessHR, ErrorHR
 
 
 def index(request):
@@ -78,7 +79,7 @@ class GetBusStations(BaseAPIView, generics.ListAPIView):
         result_queryset = self.queryset.filter(self.query_sql)
         result = OrderedDict()
         for i in result_queryset:
-            number = i.number[:i.number.find("路")+1] if i.number.find("路") else i.number
+            number = i.number[:i.number.find("路") + 1] if i.number.find("路") else i.number
             result.setdefault(number, GetBusStationsSerializer(i).data)
 
         page = self.paginate_queryset(list(result.values()))
@@ -86,3 +87,25 @@ class GetBusStations(BaseAPIView, generics.ListAPIView):
             return self.get_paginated_response(page)
 
         return SuccessHR(self.get_serializer(result_queryset.all(), many=True).data)
+
+
+class InitBusBaseInfo(BaseAPIView, generics.CreateAPIView):
+    """初始化公交信息"""
+
+    def post(self, request, *args, **kwargs):
+        result = grab_base_bus()
+        need_add_obj = []
+        for i in result:
+            name = i.get("name")
+            href = i.get("href")
+            need_add_obj.append(BusInfo(
+                number=name,
+                grab_real_url=href,
+            ))
+        BusInfo.objects.bulk_create(need_add_obj)
+        return SuccessHR("初始化成功")
+
+
+class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
+    """获取实时信息"""
+    pass

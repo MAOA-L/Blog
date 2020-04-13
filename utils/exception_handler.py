@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied, NotAuthenticated, Method
 from rest_framework.response import Response
 from rest_framework.views import set_rollback
 
-from utils.return_tools import error_hr
+from common.return_tool import ErrorHR
 
 
 class BizException(Exception):
@@ -53,7 +53,7 @@ def custom_exception_handler(exc, context):
     set_rollback()
 
     if isinstance(exc, NotAuthenticated):
-        return error_hr(data=None, status_code=401, errcode=1, errmsg="请登录")
+        return ErrorHR(data=None, status_code=401, errcode=1, msg="请登录")
 
     if isinstance(exc, exceptions.APIException):
         headers = {}
@@ -67,17 +67,17 @@ def custom_exception_handler(exc, context):
         # else:
         #     data = {'detail': exc.detail}
         if isinstance(exc, (PermissionDenied, PermissionDeniedException)):
-            return error_hr(data=None, status_code=403, errcode=1, errmsg="没有权限访问")
+            return ErrorHR(data=None, status_code=403, errcode=1, msg="没有权限访问")
 
         elif isinstance(exc, MethodNotAllowed):
-            return error_hr(data=None, status_code=405, errcode=1, errmsg="不允许访问")
+            return ErrorHR(data=None, status_code=405, errcode=1, msg="不允许访问")
 
-        return error_hr(exc.detail)
+        return ErrorHR(exc.detail)
 
     if isinstance(exc, (BizException,)):
-        return error_hr(exc.detail)
+        return ErrorHR(exc.detail)
 
     if isinstance(exc, Http404):
-        return error_hr(data=None, status_code=404, errcode=1, errmsg="找不到资源")
+        return ErrorHR(data=None, status_code=404, errcode=1, msg="找不到资源")
 
-    return error_hr('系统错误', )
+    return ErrorHR('系统错误', )

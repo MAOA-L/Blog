@@ -11,8 +11,7 @@ from django.urls import path
 from bus import views as bus_views
 
 urlpatterns = [
-    # path('index', views.index),
-    # path('bus_search', views.bus_search),
-    # path('', views.index),
-    url(r'^getBusStations/$', bus_views.GetBusStations.as_view())
+    url(r'^getBusStations/$', bus_views.GetBusStations.as_view()),
+    # 初始化公交基本信息
+    url(r'^initBusBaseInfo/$', bus_views.InitBusBaseInfo.as_view())
 ]

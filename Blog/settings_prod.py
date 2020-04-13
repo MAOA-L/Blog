@@ -76,6 +76,14 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
+        'time_request_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/time_request.log',
+            'maxBytes': 100 * 1024 * 1024,
+            'backupCount': 5,
+            'formatter': 'no_format',
+        },
     },
     'loggers': {
         'django': {
@@ -93,6 +101,12 @@ LOGGING = {
             # 控制台输出
             'handlers': ['console'],
             'level': 'INFO',
+            'propagate': True
+        },
+        'time.request': {
+            # 时间统计
+            'handlers': ['time_request_handler'],
+            'level': 'DEBUG',
             'propagate': True
         },
     }

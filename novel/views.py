@@ -135,7 +135,7 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                         if need_add_obj:
                             SectionContent.objects.bulk_create(need_add_obj)
                         # 清空
-                        log_common.out(msg="===清空队列===")
+                        log_common.info(msg="===清空队列===")
                         section_deque.clear()
                 return SuccessHR("爬取成功")
         except NovelEntry.DoesNotExist:
@@ -164,10 +164,10 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                 sections = SectionContent.objects.filter(is_active=True, novel=novel).order_by("section__order")
                 with open(file_path, "w+", encoding="utf-8") as f:
                     for i in sections:
-                        log_common.out(msg=f"写入{i.section.name}")
+                        log_common.info(msg=f"写入{i.section.name}")
                         f.write('\n' + i.section.name + '\n')
                         f.write(i.content)
-                log_common.out(msg="写入完成")
+                log_common.info(msg="写入完成")
             if os.path.exists(file_path):
                 file = open(file_path, 'r', encoding="utf-8")
                 response = self.get_file_response(file=file, file_name=novel_name + ".txt")

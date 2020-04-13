@@ -19,7 +19,7 @@ class TimeLogMiddleware(MiddlewareMixin):
         request.REQUEST_TIME = time.time()
 
     def process_response(self, request, response):
-        time_logger = log_common.get_logger()
+        time_logger = log_common.get_logger("time.request")
         ip = request.META.get('REMOTE_ADDR', 'NO IP')
         msg = "{0}\t{1}\t{2}".format(ip, request.path, str((time.time() - request.REQUEST_TIME) * 1000))
         time_logger.info(msg)

@@ -27,9 +27,10 @@ class Log:
     def get_logger(self, log_name):
         _log = self.has_log.get(log_name)
         if not _log:
-            _log = logging.getLogger(log_name)
+            _log = Log(log_name=log_name)
             self.has_log[log_name] = _log
             return _log
+        return _log
 
 
 log_common = Log()

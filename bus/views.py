@@ -10,7 +10,7 @@ from bus.models import BusInfo
 from bus.serializers import GetBusStationsSerializer
 from base.views import BaseAPIView
 from spider.bus import bus_yy
-from utils.return_tools import success_hr
+from common.return_tool import SuccessHR
 
 
 def index(request):
@@ -85,4 +85,4 @@ class GetBusStations(BaseAPIView, generics.ListAPIView):
         if page is not None:
             return self.get_paginated_response(page)
 
-        return success_hr(self.get_serializer(result_queryset.all(), many=True).data)
+        return SuccessHR(self.get_serializer(result_queryset.all(), many=True).data)

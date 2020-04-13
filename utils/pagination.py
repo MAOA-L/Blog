@@ -3,7 +3,7 @@ from collections import OrderedDict
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 
-from utils.return_tools import success_hr
+from common.return_tool import SuccessHR
 
 
 class CustomPagination(PageNumberPagination):
@@ -24,7 +24,7 @@ class CustomPagination(PageNumberPagination):
                 ('list', data)
             ])
         else:
-            # TODO self.page 属性不存在， 下述字段值需要重新获取 -- 文强
+            # TODO self.page 属性不存在， 下述字段值需要重新获取
             content = OrderedDict([
                 ('pageNo', 0),
                 ('pageSize', self.page_size),
@@ -34,7 +34,7 @@ class CustomPagination(PageNumberPagination):
                 ('list', [])
             ])
 
-        return success_hr(content)
+        return SuccessHR(content)
 
     def paginate_queryset(self, queryset, request, view=None):
         """

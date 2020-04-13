@@ -31,7 +31,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            # 'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
         },
         'no_format': {
             # 只有日志时间的格式
@@ -79,7 +81,7 @@ LOGGING = {
         'django': {
             'handlers': ['console', 'default'],
             'level': 'INFO',
-            'propagate': True
+            'propagate': False
         },
         'django.request': {
             # 请求处理

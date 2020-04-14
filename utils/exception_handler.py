@@ -70,7 +70,7 @@ def custom_exception_handler(exc, context):
             return ErrorHR(data=None, status_code=403, errcode=1, msg="没有权限访问")
 
         elif isinstance(exc, MethodNotAllowed):
-            return ErrorHR(data=None, status_code=405, errcode=1, msg="不允许访问")
+            return ErrorHR(data=None, status_code=405, errcode=1, msg=exc.detail)
 
         return ErrorHR(exc.detail)
 

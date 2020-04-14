@@ -1,3 +1,4 @@
+import datetime
 import json
 from collections import OrderedDict
 
@@ -6,10 +7,10 @@ from django.shortcuts import render, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
-from bus.models import BusInfo
-from bus.serializers import GetBusStationsSerializer
+from bus.models import BusInfo, BusStations
+from bus.serializers import GetBusStationsSerializer, GetBusInfoSerializer
 from base.views import BaseAPIView
-from bus.utils import grab_base_bus
+from bus.utils import grab_base_bus, grab_bus_real_url, grab_bus_real_info, grab_real_info
 from spider.bus import bus_yy
 from common.return_tool import SuccessHR, ErrorHR
 
@@ -56,12 +57,49 @@ def bus_search(request):
     return render(request, 'htmls/bus_list.html', {'bus_list': p})
 
 
-class GetBusStations(BaseAPIView, generics.ListAPIView):
+class InitBusBaseInfo(BaseAPIView, generics.CreateAPIView):
+    """初始化公交信息"""
+
+    def post(self, request, *args, **kwargs):
+        result = grab_base_bus()
+        need_add_obj = []
+        for i in result:
+            name = i.get("name")
+            href = i.get("href")
+            need_add_obj.append(BusInfo(
+                number=name,
+                grab_real_url=href,
+            ))
+        BusInfo.objects.bulk_create(need_add_obj)
+        return SuccessHR("初始化成功")
+
+
+class InitBusRealUrl(BaseAPIView, generics.CreateAPIView):
+    """初始化公交实况链接"""
+
+    def post(self, request, *args, **kwargs):
+        # 获取公交基础信息
+        bus_info = BusInfo.objects.filter(is_active=True)
+        bus_info_dict = [{"id": i.id.hex, "url": i.grab_real_url} for i in bus_info]
+        result = grab_bus_real_url(bus_info_dict)
+        raw = 0
+        for i in result:
+            pk = i.get("id")
+            real_url = i.get("real_url")
+            # 更新
+            raw += BusInfo.objects.filter(is_active=True, id=pk).update(real_url=real_url)
+        return SuccessHR({
+            "data": result,
+            "raw": raw
+        })
+
+
+class GetBusInfo(BaseAPIView, generics.ListAPIView):
     """
-    get bus stations
+    获取公交基础信息列表
     """
     queryset = BusInfo.objects.filter().order_by('bus_type', 'number', 'visit_traffic')
-    serializer_class = GetBusStationsSerializer
+    serializer_class = GetBusInfoSerializer
 
     query_sql = Q(is_active=True)
 
@@ -80,7 +118,7 @@ class GetBusStations(BaseAPIView, generics.ListAPIView):
         result = OrderedDict()
         for i in result_queryset:
             number = i.number[:i.number.find("路") + 1] if i.number.find("路") else i.number
-            result.setdefault(number, GetBusStationsSerializer(i).data)
+            result.setdefault(number, GetBusInfoSerializer(i).data)
 
         page = self.paginate_queryset(list(result.values()))
         if page is not None:
@@ -89,23 +127,59 @@ class GetBusStations(BaseAPIView, generics.ListAPIView):
         return SuccessHR(self.get_serializer(result_queryset.all(), many=True).data)
 
 
-class InitBusBaseInfo(BaseAPIView, generics.CreateAPIView):
-    """初始化公交信息"""
-
-    def post(self, request, *args, **kwargs):
-        result = grab_base_bus()
-        need_add_obj = []
-        for i in result:
-            name = i.get("name")
-            href = i.get("href")
-            need_add_obj.append(BusInfo(
-                number=name,
-                grab_real_url=href,
-            ))
-        BusInfo.objects.bulk_create(need_add_obj)
-        return SuccessHR("初始化成功")
-
-
 class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
-    """获取实时信息"""
-    pass
+    """
+    获取实时信息
+    策略:
+        获取实况信息时,第一次会初始化公交站点的信息, 并做更新记录, 定时更新站点信息。
+        此外直接获取实况信息与数据库数据进行匹配
+    """
+
+    def list(self, request, *args, **kwargs):
+        pk = request.query_params.get("id")
+        try:
+            bus_info = BusInfo.objects.get(is_active=True, id=pk)
+        except BusInfo.DoesNotExist:
+            return ErrorHR("参数错误")
+        else:
+            self.create_update_stations(bus_info=bus_info)
+
+            # 获取实时信息
+            grab_real_info(url=bus_info.real_url)
+
+            # 获取站点信息
+            stations_list = BusStations.objects.filter(is_active=True, bus=bus_info)
+            serializer = GetBusStationsSerializer(stations_list, many=True)
+            return SuccessHR(serializer.data)
+
+    def create_update_stations(self, bus_info):
+        """创建或更新站点信息"""
+        current_time = datetime.datetime.now()
+        # 未获取站点信息或者3天未更新，则获取站点信息
+        if not bus_info.has_stations or not bus_info.update_time or not current_time.day - bus_info.update_time.day >= 3:
+            result = grab_bus_real_info(pk=bus_info.id.hex, url=bus_info.real_url)
+            need_add_obj = []
+            # 更新/创建数据
+            exists_stations_id = [i.station_id for i in
+                                  BusStations.objects.filter(is_active=True, bus=bus_info)]
+            for i in result:
+                station_id = i.get("station_id")
+                name = i.get("name")
+                # 此策略在即使已经存在站点信息的情况下，仍然可以对数据进行新增
+                if station_id in exists_stations_id:
+                    # 更新
+                    raw = BusStations.objects.filter(is_active=True, bus=bus_info,
+                                                     station_id=station_id).update(name=name)
+
+                else:
+                    # 新增
+                    need_add_obj.append(BusStations(
+                        bus=bus_info,
+                        name=i.get("name"),
+                        station_id=i.get("station_id"),
+                    ))
+            BusStations.objects.bulk_create(need_add_obj)
+        bus_info.has_stations = True
+        bus_info.update_time = current_time
+        bus_info.save()
+        return True

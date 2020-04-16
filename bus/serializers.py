@@ -22,7 +22,7 @@ class GetBusInfoSerializer(serializers.ModelSerializer):
     def get_mark(self, obj):
         # 获取站点信息
         bus_stations_name = BusStations.objects.filter(is_active=True).values("name")
-        return [bus_stations_name]
+        return [i for i in bus_stations_name]
         
     def get_number(self, obj):
         return obj.number[:obj.number.find("路") + 1] if obj.number.find("路") else obj.number

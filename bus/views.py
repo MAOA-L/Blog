@@ -98,7 +98,7 @@ class GetBusInfo(BaseAPIView, generics.ListAPIView):
     """
     获取公交基础信息列表
     """
-    queryset = BusInfo.objects.filter().order_by('bus_type', 'number', 'visit_traffic')
+    queryset = BusInfo.objects.filter().order_by('visit_traffic', 'order', 'bus_type', 'number', )
     serializer_class = GetBusInfoSerializer
 
     query_sql = Q(is_active=True)
@@ -115,14 +115,16 @@ class GetBusInfo(BaseAPIView, generics.ListAPIView):
         if number:
             self.query_sql &= Q(number__contains=number)
         result_queryset = self.queryset.filter(self.query_sql)
-        result = OrderedDict()
-        for i in result_queryset:
-            number = i.number[:i.number.find("路") + 1] if i.number.find("路") else i.number
-            result.setdefault(number, GetBusInfoSerializer(i).data)
+        # result = OrderedDict()
+        # for i in result_queryset:
+        #     number = i.number[:i.number.find("路") + 1] if i.number.find("路") else i.number
+        #     result.setdefault(number, GetBusInfoSerializer(i).data)
 
-        page = self.paginate_queryset(list(result.values()))
+        # page = self.paginate_queryset(list(result.values()))
+        page = self.paginate_queryset(result_queryset)
         if page is not None:
-            return self.get_paginated_response(page)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         return SuccessHR(self.get_serializer(result_queryset.all(), many=True).data)
 

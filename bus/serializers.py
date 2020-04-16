@@ -16,7 +16,7 @@ class GetBusInfoSerializer(serializers.ModelSerializer):
     获取公交基本信息
     """
 
-    number = serializers.SerializerMethodField(label="路号")
+    # number = serializers.SerializerMethodField(label="路号")
     mark = serializers.SerializerMethodField(label="备注")
 
     def get_mark(self, obj):
@@ -24,8 +24,8 @@ class GetBusInfoSerializer(serializers.ModelSerializer):
         bus_stations_name = BusStations.objects.filter(is_active=True, bus=obj).values("name")
         return ",".join([i['name'] for i in bus_stations_name])
         
-    def get_number(self, obj):
-        return obj.number[:obj.number.find("路") + 1] if obj.number.find("路") else obj.number
+    # def get_number(self, obj):
+    #     return obj.number[:obj.number.find("路") + 1] if obj.number.find("路") else obj.number
 
     class Meta:
         model = BusInfo

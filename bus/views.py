@@ -162,7 +162,7 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
             # 更新/创建数据
             exists_stations_id = [i.station_id for i in
                                   BusStations.objects.filter(is_active=True, bus=bus_info)]
-            for i in result:
+            for inx, i in enumerate(result):
                 station_id = i.get("station_id")
                 name = i.get("name")
                 # 此策略在即使已经存在站点信息的情况下，仍然可以对数据进行新增
@@ -177,6 +177,7 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
                         bus=bus_info,
                         name=i.get("name"),
                         station_id=i.get("station_id"),
+                        order=inx + 1,
                     ))
             BusStations.objects.bulk_create(need_add_obj)
         bus_info.has_stations = True

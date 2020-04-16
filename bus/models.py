@@ -35,3 +35,4 @@ class BusStations(Base):
     station_id = models.PositiveSmallIntegerField(verbose_name="站点id", null=True)
     lon = models.CharField(verbose_name="经度", max_length=32)
     lat = models.CharField(verbose_name="纬度", max_length=32)
+    order = models.PositiveSmallIntegerField(verbose_name="站点排序", default=0)

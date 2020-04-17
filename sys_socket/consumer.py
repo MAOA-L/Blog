@@ -8,10 +8,12 @@
  """
 import json
 
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer, JsonWebsocketConsumer, AsyncJsonWebsocketConsumer
+
+from common.log import log_common
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class ChatConsumer(AsyncJsonWebsocketConsumer):
     groups = ["broadcast"]
 
     async def connect(self):
@@ -29,12 +31,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # To reject the connection, call:
         # await self.close()
 
-    async def receive(self, text_data=None, bytes_data=None):
-        # Called with either text_data or bytes_data for each frame
-        # You can call:
+    # async def receive_json(self, text_data=None, bytes_data=None):
+    async def receive_json(self, content, **kwargs):
+        log_common.info(content)
         await self.channel_layer.group_send(
             "chat",
             {
+                "type": "p.chat",
                 "msg": "Hello"
             }
         )
@@ -54,3 +57,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "chat",
             self.channel_name
         )
+
+    async def p_chat(self, event):
+        await self.send_json(event)

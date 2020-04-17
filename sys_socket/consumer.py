@@ -34,9 +34,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # You can call:
         await self.channel_layer.group_send(
             "chat",
-            json.dumps({
+            {
                 "msg": "Hello"
-            })
+            }
         )
         # await self.send(json.dumps({
         #     "msg": "Hello"

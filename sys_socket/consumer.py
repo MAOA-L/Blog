@@ -32,9 +32,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         # Called with either text_data or bytes_data for each frame
         # You can call:
-        await self.send(json.dumps({
-            "msg": "Hello"
-        }))
+        await self.channel_layer.group_send(
+            "chat",
+            json.dumps({
+                "msg": "Hello"
+            })
+        )
+        # await self.send(json.dumps({
+        #     "msg": "Hello"
+        # }))
         # Or, to send a binary frame:
         # await self.send(bytes_data="Hello world!")
         # Want to force-close the connection? Call:

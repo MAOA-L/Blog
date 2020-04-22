@@ -10,6 +10,7 @@ def grab_base_bus():
     parse_html = html_to_etree(html_raw=res)
     bus_list = parse_html.xpath(list_rule)
     bus = []
+    # TODO 获取反向的车 -
     for i in bus_list:
         href_list = i.xpath('./@href')
         if href_list:

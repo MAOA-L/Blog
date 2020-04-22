@@ -22,9 +22,11 @@ class BusInfo(Base):
     bus_type = models.ForeignKey(BusTypeArea, verbose_name="公交类型", on_delete=models.SET_NULL, null=True)
     grab_real_url = models.CharField(verbose_name="用来获取实况信息的url", max_length=255)
     real_url = models.CharField(verbose_name="获取实况信息的url", max_length=255, null=True)
+    ajax_data = models.CharField(verbose_name="获取实况的异步data", max_length=255, null=True)
     has_stations = models.BooleanField(verbose_name="是否已经存在站点信息", default=False)
     update_time = models.DateField(verbose_name="更新站点信息的时间", null=True)
     order = models.PositiveSmallIntegerField(verbose_name="排序", default=0)
+
 
 class BusStations(Base):
     """

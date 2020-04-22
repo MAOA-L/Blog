@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from bus.models import BusInfo, BusStations
 from bus.serializers import GetBusStationsSerializer, GetBusInfoSerializer
 from base.views import BaseAPIView
-from bus.utils import grab_base_bus, grab_bus_real_url, grab_bus_real_info, grab_real_info
+from bus.utils import grab_base_bus, grab_bus_real_url, grab_bus_real_info, grab_real_info, grab_ajax_data
 from spider.bus import bus_yy
 from common.return_tool import SuccessHR, ErrorHR
 from sys_socket.consumer import ViewSocket
@@ -146,28 +146,33 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
         except BusInfo.DoesNotExist:
             return ErrorHR("参数错误")
         else:
+            # 完善站点信息
             self.create_update_stations(bus_info=bus_info)
-
+            # 完善ajax_data
+            if not bus_info.ajax_data:
+                self.get_ajax_data(url=bus_info.real_url, bus_info=bus_info)
             # 获取实时信息
-            grab_real_info(url=bus_info.real_url)
-
+            real_info = grab_real_info(data=bus_info.ajax_data)
+            real_info_dict = {}
+            for i in real_info:
+                real_info_dict[int(i.get("nearstationid", -1))] = i
             # 获取站点信息
             stations_list = BusStations.objects.filter(is_active=True, bus=bus_info)
-            serializer = GetBusStationsSerializer(stations_list, many=True)
+            serializer = GetBusStationsSerializer(stations_list, many=True, context={"real_info": real_info_dict})
             return SuccessHR(serializer.data)
 
     def create_update_stations(self, bus_info):
         """创建或更新站点信息"""
         current_time = datetime.datetime.now()
         # 未获取站点信息或者3天未更新，则获取站点信息
-        if not bus_info.has_stations or not bus_info.update_time or not current_time.day - bus_info.update_time.day >= 3:
+        if not bus_info.has_stations or not bus_info.update_time or current_time.day - bus_info.update_time.day >= 3:
             result = grab_bus_real_info(pk=bus_info.id.hex, url=bus_info.real_url)
             need_add_obj = []
             # 更新/创建数据
             exists_stations_id = [i.station_id for i in
                                   BusStations.objects.filter(is_active=True, bus=bus_info)]
             for inx, i in enumerate(result):
-                station_id = i.get("station_id")
+                station_id = int(i.get("station_id"))
                 name = i.get("name")
                 # 此策略在即使已经存在站点信息的情况下，仍然可以对数据进行新增
                 if station_id in exists_stations_id:
@@ -184,10 +189,16 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
                         order=inx + 1,
                     ))
             BusStations.objects.bulk_create(need_add_obj)
-        bus_info.has_stations = True
-        bus_info.update_time = current_time
-        bus_info.save()
+            bus_info.has_stations = True
+            bus_info.update_time = current_time
+            bus_info.save()
         return True
+
+    def get_ajax_data(self, url, bus_info: BusInfo):
+        """获取ajax data"""
+        ajax_data = grab_ajax_data(real_url=url)
+        bus_info.ajax_data = ajax_data
+        bus_info.save()
 
 
 class TestViewToSocket(BaseAPIView, generics.CreateAPIView):

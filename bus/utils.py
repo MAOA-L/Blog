@@ -1,4 +1,3 @@
-from bus.models import BusInfo
 from common.utils import requests_get, html_to_etree
 
 
@@ -61,14 +60,29 @@ def grab_bus_real_info(pk, url):
     return result
 
 
-def grab_real_info(url):
+def grab_ajax_data(real_url):
+    """根据real_url抓取ajax的url"""
+    import re
+    res = requests_get(url=real_url)
+    # parse_html = html_to_etree(html_raw=res)
+    # ajax = parse_html.xpath('/html/head/script[3]')
+    m1 = re.findall("data:(.*)", res)
+    m2 = re.findall(r"\"([a-zA-Z0-9=&]+)", "".join(m1))
+    if m2:
+        return m2[0]
+    # parse_html = html_to_etree(html_raw=res)
+    # station_list = parse_html.xpath('//*[@id="touchBox"]/li')
+
+
+def grab_real_info(data, service=None):
     """抓取实时信息"""
-    #
+    if service is None:
+        service = "http://bm.eyuyao.com/bus/mobile/getGpsInfoCs.php?{data}"
 
-    host = 'http://bm.eyuyao.com/bus/mobile/getGpsInfoCs.php?num={}&pdxianlu={}'
-
-    return []
+    url = service.format(data=data)
+    res = requests_get(url=url, j=True)
+    return res
 
 
 if __name__ == '__main__':
-    grab_base_bus()
+    grab_real_info(data="num=102&pdxianlu=1")

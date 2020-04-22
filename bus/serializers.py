@@ -23,7 +23,7 @@ class GetBusInfoSerializer(serializers.ModelSerializer):
         # 获取站点信息
         bus_stations_name = BusStations.objects.filter(is_active=True, bus=obj).values("name")
         return ",".join([i['name'] for i in bus_stations_name])
-        
+
     # def get_number(self, obj):
     #     return obj.number[:obj.number.find("路") + 1] if obj.number.find("路") else obj.number
 
@@ -45,9 +45,15 @@ class GetBusStationsSerializer(serializers.ModelSerializer):
 
     status = serializers.SerializerMethodField(label="站点状态")
 
-    def get_status(self, obj):
+    def get_status(self, obj: BusStations):
         # 0行驶中 1到站 离站
-        return 0
+        real_info = self.context.get("real_info", None)
+        if not real_info:
+            return -1
+        else:
+            if obj.station_id in real_info.keys():
+                return int(real_info[obj.station_id].get("yxbj"))
+        return -1
 
     class Meta:
         model = BusStations

@@ -15,11 +15,13 @@ HEADERS = {
 
 
 # 发送请求
-def requests_get(url, headers=None, decode='utf-8'):
+def requests_get(url, headers=None, decode='utf-8', j=False):
     if not headers:
         headers = HEADERS
-    res = requests.post(url=url, headers=headers).content.decode(decode)
-    return res
+    res = requests.post(url=url, headers=headers)
+    if j:
+        return res.json()
+    return res.content.decode(decode)
 
 
 # 解析网页

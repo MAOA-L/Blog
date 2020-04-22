@@ -2,6 +2,7 @@ import datetime
 import json
 from collections import OrderedDict
 
+from channels.layers import get_channel_layer
 from django.db.models import Q
 from django.shortcuts import render, HttpResponse
 from rest_framework import generics
@@ -13,6 +14,7 @@ from base.views import BaseAPIView
 from bus.utils import grab_base_bus, grab_bus_real_url, grab_bus_real_info, grab_real_info
 from spider.bus import bus_yy
 from common.return_tool import SuccessHR, ErrorHR
+from sys_socket.consumer import ViewSocket
 
 
 def index(request):
@@ -186,3 +188,16 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
         bus_info.update_time = current_time
         bus_info.save()
         return True
+
+
+class TestViewToSocket(BaseAPIView, generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        msg = request.data.get("msg", "无内容")
+        ViewSocket.group_send(channel_name="chat", event=self.get_event(msg=msg))
+        return SuccessHR("已发送")
+
+    def get_event(self, msg):
+        return {
+            "type": "p.chat",
+            "msg": msg
+        }

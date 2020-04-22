@@ -21,4 +21,10 @@ urlpatterns = [
     url(r'^getBusInfo/$', bus_views.GetBusInfo.as_view()),
     # 获取公交的实况信息
     url(r'^getBusRealTimeInfo/$', bus_views.GetBusRealTimeInfo.as_view()),
+
+
+
+    url(r'^testViewToSocket/$', bus_views.TestViewToSocket.as_view()),
+
+
 ]

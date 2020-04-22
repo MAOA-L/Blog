@@ -8,7 +8,9 @@
  """
 import json
 
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer, JsonWebsocketConsumer, AsyncJsonWebsocketConsumer
+from channels.layers import get_channel_layer
 
 from common.log import log_common
 
@@ -60,3 +62,21 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def p_chat(self, event):
         await self.send_json(event)
+
+
+class ViewSocket:
+    @classmethod
+    def group_send(cls, channel_name, event, channel_layer=None):
+        if not channel_layer:
+            channel_layer = cls.get_c_layer()
+        async_to_sync(channel_layer.group_send)(channel_name, event)
+
+    @classmethod
+    def private_send(cls, channel_name, event, channel_layer=None):
+        if not channel_layer:
+            channel_layer = cls.get_c_layer()
+        async_to_sync(channel_layer.send)(channel_name, event)
+
+    @staticmethod
+    def get_c_layer(name="default"):
+        return get_channel_layer(alias=name)

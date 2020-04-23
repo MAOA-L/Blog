@@ -155,7 +155,7 @@ class GetBusRealTimeInfo(BaseAPIView, generics.ListAPIView):
             real_info = grab_real_info(data=bus_info.ajax_data)
             real_info_dict = {}
             for i in real_info:
-                real_info_dict[int(i.get("nearstationid", -1))+1] = i
+                real_info_dict[int(i.get("nearstationid", -1))] = i
             # 获取站点信息
             stations_list = BusStations.objects.filter(is_active=True, bus=bus_info)
             serializer = GetBusStationsSerializer(stations_list, many=True, context={"real_info": real_info_dict})

@@ -114,7 +114,7 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                 # 获取已经爬取的章节
                 exists_content = SectionContent.objects.filter(is_active=True, novel=novel)
                 n_sections = NovelSection.objects.filter(is_active=True, novel=novel).exclude(
-                    id__in=[i.id.hex for i in exists_content])
+                    id__in=[i.section.id.hex for i in exists_content])
                 # 生成格式
                 n_sections_list = [i for i in GetNovelSectionsSerializer(n_sections, many=True).data]
                 # 切片 100 个一组

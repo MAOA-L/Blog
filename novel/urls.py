@@ -23,4 +23,8 @@ urlpatterns = [
     url(r'^entry/getNovelToTxt/$', views.GetNovelToTxt.as_view()),
     # 获取小说txt
     url(r'^entry/errorTest/$', views.ErrorTest.as_view()),
+
+
+    # 获取小说
+    url(r'^entry/graspWholeNovel/$', views.GraspWholeNovel.as_view()),
 ]

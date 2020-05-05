@@ -15,6 +15,7 @@ from common.utils import requests_get, html_to_etree
 from novel.models import GraspRule, NovelEntry, NovelSection, SectionContent
 from novel.serializers import CreateGraspRuleSerializer, GetNovelSectionsSerializer
 from novel.utils import get_content
+from utils.exception_handler import BizException
 
 
 class CreateNovelEntry(BaseAPIView, generics.CreateAPIView):
@@ -137,6 +138,8 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                         # 清空
                         log_common.info(msg="===清空队列===")
                         section_deque.clear()
+                novel.content_complete = True
+                novel.save()
                 return SuccessHR("爬取成功")
         except NovelEntry.DoesNotExist:
             return SuccessHR("不存在该小说")
@@ -182,8 +185,74 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
 
 class ErrorTest(BaseAPIView, generics.ListAPIView):
     """错误"""
+
     def list(self, request, *args, **kwargs):
         # a = 1 / 0
         return SuccessHR([])
 
 
+class GraspWholeNovel(BaseAPIView, generics.CreateAPIView):
+    """获取整本小说"""
+
+    def post(self, request, *args, **kwargs):
+        # 小说url
+        url = request.data.get("url")
+        host = request.data.get("host")
+        rule = self._search_rule(url=host)
+        if not rule:
+            return ErrorHR("该网站不存在抓取规则")
+        # 获取书本实体
+        book = self._get_book(url=url, rule=rule.book_name, decode=rule.decode)
+        if not book.section_complete:
+            # 获取章节
+            self._get_sections(url=url, list_rule=rule.list_rule,
+                               section_rule=rule.section_rule, book=book, decode=rule.decode)
+        if not book.content_complete:
+            pass
+        return SuccessHR("success")
+
+    def _pick_up_url_host(self):
+        """提取url中的host地址，用来查询该host是否存在规则"""
+
+    def _search_rule(self, url):
+        """获取当前输入的小说url地址是否存在规则"""
+        return GraspRule.objects.filter(is_active=True, host__contains=url).first()
+
+    def _get_book(self, url, rule, decode="utf-8"):
+        """获取书"""
+        try:
+            n = NovelEntry.objects.get(is_active=True, url=url)
+        except NovelEntry.DoesNotExist:
+            res = requests_get(url=url, decode=decode)
+            parse_html = html_to_etree(res)
+            book_name_p = parse_html.xpath(rule)
+            book_name = ""
+            if book_name_p:
+                book_name = book_name_p[0].text
+            # 创建书本
+            return NovelEntry.objects.create(name=book_name, url=url)
+        else:
+            return n
+
+    def _get_sections(self, url, list_rule, section_rule, book, decode="utf-8"):
+        # 获取章节列表
+        res = requests_get(url=url, decode=decode)
+        parse_html = html_to_etree(res)
+        section_p = parse_html.xpath(list_rule)
+        need_add_obj = []
+        order = 0
+        for i in section_p:
+            # 获取目录
+            order += 1
+            a = i.xpath(section_rule)
+            if a:
+                o = a[0]
+                href = o.xpath("./@href")[0]
+                sec_name = o.text
+                need_add_obj.append(NovelSection(novel=book, name=sec_name, url=href, order=order))
+        # 结束后再次判断need_add_obj
+        if need_add_obj:
+            NovelSection.objects.bulk_create(need_add_obj)
+        # 更新book状态
+        book.section_complete = True
+        book.save()

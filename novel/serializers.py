@@ -22,6 +22,8 @@ class CreateGraspRuleSerializer(serializers.ModelSerializer):
             'section_rule_p',
             'section_rule',
             'content_rule',
+            'list_rule',
+            'book_name'
         )
 
 

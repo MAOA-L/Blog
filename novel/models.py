@@ -12,13 +12,15 @@ class GraspRule(Base):
     section_rule = models.CharField(verbose_name="章节抓取规则", max_length=100)
     list_rule = models.CharField(verbose_name="列表抓取规则", max_length=100)
     decode = models.CharField(verbose_name="解码配置", max_length=20, default="utf-8")
+    book_name = models.CharField(verbose_name="书名规则", max_length=100, null=True)
 
 
 class NovelEntry(Base):
     """小说信息"""
     name = models.CharField(verbose_name="小说名字", max_length=50)
     url = models.CharField(verbose_name="小说网站url", max_length=255)
-    host = models.CharField(verbose_name="小说网站host", max_length=255)
+    section_complete = models.BooleanField(verbose_name="章节是否已经获取", default=False)
+    content_complete = models.BooleanField(verbose_name="内容是否已经获取", default=False)
 
 
 class NovelSection(Base):

@@ -146,7 +146,7 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
         except NovelEntry.DoesNotExist:
             return SuccessHR("不存在该小说")
         except Exception as ex:
-            print(ex)
+            log_common.error(ex)
             return SuccessHR("中断，可再次开启~")
 
 

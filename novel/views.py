@@ -95,6 +95,7 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         # 获取小说主体
+        # TODO 遍历 筛选出哪些章节需要再次获取章节内容，进行获取
         novel_id = request.query_params.get("novel_id")
         if not novel_id:
             return ErrorHR("请选择小说")
@@ -122,7 +123,8 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                     section_deque.append(i)
                     if len(section_deque) == 100:
                         # 获取章节的内容
-                        result = get_content(sections=section_deque, host=host, content_rule=content_rule)
+                        result = get_content(sections=section_deque, host=host,
+                                             content_rule=content_rule, decode=g_rule.decode)
                         # 整理成对象
                         need_add_obj = []
                         for j in result:

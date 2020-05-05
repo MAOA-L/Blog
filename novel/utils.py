@@ -17,7 +17,7 @@ def get_content(sections, content_rule, host=None, decode="utf-8"):
     for obj in sections:
         pk = obj.get("id")
         url = obj.get("url")
-        log_common.out(msg=f"章节名{obj.get('name')}-{count}")
+        log_common.info(msg=f"章节名{obj.get('name')}-{count}")
         # 获取章节内容
         content = parse_content(sections_url=host + url, content_rule=content_rule, decode=decode)
         result.append({

@@ -118,10 +118,10 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                 # 生成格式
                 n_sections_list = [i for i in GetNovelSectionsSerializer(n_sections, many=True).data]
                 # 切片 100 个一组
-                section_deque = deque(maxlen=100)
+                section_deque = deque(maxlen=25)
                 for i in n_sections_list:
                     section_deque.append(i)
-                    if len(section_deque) == 100:
+                    if len(section_deque) == 25:
                         # 获取章节的内容
                         result = get_content(sections=section_deque, host=host,
                                              content_rule=content_rule, decode=g_rule.decode)

@@ -18,7 +18,7 @@ HEADERS = {
 def requests_get(url, headers=None, decode='utf-8', j=False):
     if not headers:
         headers = HEADERS
-    res = requests.get(url=url, headers=headers, verify=False)
+    res = requests.get(url=url, headers=headers, verify=False, timeout=6)
     if j:
         return res.json()
     return res.content.decode(decode)

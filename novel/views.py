@@ -112,16 +112,16 @@ class GetNovelContent(BaseAPIView, generics.ListAPIView):
                 content_rule = g_rule.content_rule
                 # 获取小说下未获取小说内容的章节
                 # 获取已经爬取的章节
-                exists_content = SectionContent.objects.filter(is_active=True, novel=novel)
+                exists_content = SectionContent.objects.filter(is_active=True, novel=novel).values_list("section_id")
                 n_sections = NovelSection.objects.filter(is_active=True, novel=novel).exclude(
-                    id__in=[i.section.id.hex for i in exists_content])
+                    id__in=[i[0] for i in exists_content])
                 # 生成格式
                 n_sections_list = [i for i in GetNovelSectionsSerializer(n_sections, many=True).data]
                 # 切片 100 个一组
-                section_deque = deque(maxlen=25)
+                section_deque = deque(maxlen=10)
                 for i in n_sections_list:
                     section_deque.append(i)
-                    if len(section_deque) == 25:
+                    if len(section_deque) == 10:
                         # 获取章节的内容
                         result = get_content(sections=section_deque, host=host,
                                              content_rule=content_rule, decode=g_rule.decode)

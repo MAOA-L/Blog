@@ -25,6 +25,7 @@ urlpatterns = [
 
 
     url(r'^testViewToSocket/$', bus_views.TestViewToSocket.as_view()),
+    url(r'^testView/$', bus_views.TestView.as_view()),
 
 
 ]

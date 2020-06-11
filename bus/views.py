@@ -212,3 +212,10 @@ class TestViewToSocket(BaseAPIView, generics.CreateAPIView):
             "type": "p.chat",
             "msg": msg
         }
+
+
+class TestView(BaseAPIView, generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        msg = request.data.get("msg", "无内容")
+        print(msg)
+        return SuccessHR("已发送")

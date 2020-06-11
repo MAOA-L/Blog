@@ -18,10 +18,15 @@ HEADERS = {
 def requests_get(url, headers=None, decode='utf-8', j=False):
     if not headers:
         headers = HEADERS
-    res = requests.get(url=url, headers=headers, verify=False, timeout=6)
+    # res = requests.get(url=url, headers=headers, verify=False, timeout=8)
+    res = requests.get(url=url, headers=headers, timeout=8)
     if j:
         return res.json()
-    return res.content.decode(decode)
+    try:
+        return res.content.decode(decode)
+    except UnicodeDecodeError:
+        return res.content.decode(decode, errors='ignore')
+
 
 
 # 解析网页

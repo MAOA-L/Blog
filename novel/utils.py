@@ -44,7 +44,7 @@ def parse_content(sections_url, content_rule, decode="utf-8"):
     content_tab = parse_html.xpath(content_rule)
     # 提取主体内容
     if content_tab:
-        content = content_tab[0].xpath("string(.)")
+        return "".join([i.tail if i.tail else "\n\n" for i in content_tab[0]])
+        # content = content_tab[0].xpath("string(.)")
         # log_common.out(msg=f"内容{content[:10]}")
-        return content
     return None

@@ -198,7 +198,7 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
 
         response = StreamingHttpResponse(file_iterator(file_path))
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+        response['Content-Disposition'] = f'attachment;filename="{urlquote(file_name)}"'
 
         return response
 

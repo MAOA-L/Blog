@@ -196,7 +196,8 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                     else:
                         break
 
-        response = StreamingHttpResponse(file_iterator(file_path))
+        # response = StreamingHttpResponse(file_iterator(file_path))
+        response = FileResponse(file_iterator(file_path))
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = f'attachment;filename="{urlquote(file_name)}"'
 

@@ -174,9 +174,9 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                         f.write(i.content)
                 log_common.info(msg="写入完成")
             if os.path.exists(file_path):
-                file = open(file_path, 'r', encoding="utf-8")
+                # file = open(file_path, 'r', encoding="utf-8")
                 # response = self.get_file_response(file=file, file_name=novel_name + ".txt")
-                response = self.big_file_download(file=file, file_name=novel_name + ".txt", file_path=file_path)
+                response = self.big_file_download(file_name=novel_name + ".txt", file_path=file_path)
                 return response
 
     def get_file_response(self, file, file_name):
@@ -185,10 +185,10 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
         response['Content-Disposition'] = f'attachment;filename={urlquote(file_name)}'
         return response
 
-    def big_file_download(self, file, file_name, file_path):
+    def big_file_download(self, file_name, file_path):
 
-        def file_iterator(file_path, chunk_size=1024):
-            with open(file_path) as f:
+        def file_iterator(file_path, chunk_size=4096):
+            with open(file_path, 'r', encoding="utf-8") as f:
                 while True:
                     c = f.read(chunk_size)
                     if c:

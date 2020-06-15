@@ -187,7 +187,7 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
 
     def big_file_download(self, file, file_name, file_path):
 
-        def file_iterator(file_path, chunk_size=5120):
+        def file_iterator(file_path, chunk_size=1024):
             with open(file_path) as f:
                 while True:
                     c = f.read(chunk_size)

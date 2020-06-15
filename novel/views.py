@@ -3,7 +3,7 @@ from django.utils.http import urlquote
 from collections import deque
 
 from django.db.models import Q
-from django.http import FileResponse
+from django.http import FileResponse, StreamingHttpResponse
 from django.shortcuts import render
 from rest_framework import generics
 
@@ -175,13 +175,31 @@ class GetNovelToTxt(BaseAPIView, generics.RetrieveAPIView):
                 log_common.info(msg="写入完成")
             if os.path.exists(file_path):
                 file = open(file_path, 'r', encoding="utf-8")
-                response = self.get_file_response(file=file, file_name=novel_name + ".txt")
+                # response = self.get_file_response(file=file, file_name=novel_name + ".txt")
+                response = self.big_file_download(file=file, file_name=novel_name + ".txt", file_path=file_path)
                 return response
 
     def get_file_response(self, file, file_name):
         response = FileResponse(file)
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = f'attachment;filename={urlquote(file_name)}'
+        return response
+
+    def big_file_download(self, file, file_name, file_path):
+
+        def file_iterator(file_path, chunk_size=512):
+            with open(file_path) as f:
+                while True:
+                    c = f.read(chunk_size)
+                    if c:
+                        yield c
+                    else:
+                        break
+
+        response = StreamingHttpResponse(file_iterator(file_path))
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+
         return response
 
 

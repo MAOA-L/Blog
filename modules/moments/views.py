@@ -13,6 +13,6 @@ class GetMoments(BaseAPIView, generics.ListAPIView):
         b = "走在路上我也是一个生动的人 我的头发茂盛像青草 像来自遥远，野外的处女地 胳膊有力地摆动。嘴角 含笑 一点点微微的倔强 "
 
         return SuccessHR([
-            {"title": "记", "content": a[:20]},
-            {"title": "随手", "content": b[:20]},
+            {"title": "记", "content": a[:40]},
+            {"title": "随手", "content": b[:45]},
         ])

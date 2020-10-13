@@ -26,4 +26,5 @@ urlpatterns = [
     # novel
     url('v1/novel/', include("novel.urls")),
     url('v1/auth/', include("modules.wechat_mini_auth.urls")),
+    url('v1/moments/', include("modules.moments.urls")),
 ]

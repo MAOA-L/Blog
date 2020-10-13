@@ -3,10 +3,10 @@ import datetime
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'myapp',
+        'NAME': 'app_prod',
         'USER': 'root',
-        'PASSWORD': '13486059134chen',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '1996Chan',
+        'HOST': '81.68.205.132',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',

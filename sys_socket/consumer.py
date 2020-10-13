@@ -36,11 +36,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     # async def receive_json(self, text_data=None, bytes_data=None):
     async def receive_json(self, content, **kwargs):
         log_common.info(content)
+        message = content.get("message")
         await self.channel_layer.group_send(
             "chat",
             {
                 "type": "p.chat",
-                "msg": "Hello"
+                "msg": message
             }
         )
         # await self.send(json.dumps({
